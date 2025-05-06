@@ -1,0 +1,2071 @@
+<div class="">
+	<style>
+		.calc-calculator {
+			background: linear-gradient(135deg, #2d3436 0%, #1a1a1a 100%);
+			color: #fff;
+			padding: 2rem;
+			border-radius: 16px;
+			box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+			border: 1px solid rgba(255, 255, 255, 0.1);
+			position: relative;
+			overflow: hidden;
+			margin: 2rem auto;
+			width: 100%;
+			box-sizing: border-box;
+		}
+
+		.calc-calculator::before {
+			content: '';
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			background: radial-gradient(
+				circle,
+				rgba(74, 86, 157, 0.3) 0%,
+				rgba(46, 51, 90, 0.2) 40%,
+				rgba(24, 26, 46, 0) 70%
+			);
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			filter: blur(30px);
+			z-index: 0;
+			animation: pulse 8s ease-in-out infinite;
+		}
+
+		@keyframes pulse {
+			0%,
+			100% {
+				transform: translate(-50%, -50%) scale(1);
+			}
+			50% {
+				transform: translate(-50%, -50%) scale(1.2);
+			}
+		}
+
+		.calc-calculator-content {
+			position: relative;
+			z-index: 1;
+			max-width: 100%;
+		}
+
+		.calc-calculator-title {
+			text-align: left;
+			margin-bottom: 1.8rem;
+			font-size: 2rem;
+			background: linear-gradient(135deg, #e0e0e0, #ffffff);
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+			padding: 0;
+			letter-spacing: 0.5px;
+		}
+
+		.calc-input-group {
+			margin-bottom: 1.5rem;
+			width: 100%;
+		}
+
+		.calc-input-label {
+			display: block;
+			margin-bottom: 0.5rem;
+			color: #e0e0e0 !important;
+			font-size: 0.95rem;
+			font-weight: 500;
+		}
+
+		.calc-input-field {
+			width: 100%;
+			padding: 0.85rem;
+			border: 2px solid rgba(255, 255, 255, 0.1);
+			border-radius: 8px;
+			background-color: #2d3436;
+			color: #fff !important;
+			font-size: 1rem;
+			transition: all 0.3s ease;
+		}
+
+		.calc-input-field:focus {
+			outline: none;
+			border-color: rgba(255, 255, 255, 0.3);
+			background: rgba(255, 255, 255, 0.1);
+			box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.05);
+		}
+
+		.calc-checkbox-group {
+			display: flex;
+			align-items: center;
+			margin-bottom: 0.5rem;
+		}
+
+		.calc-checkbox-group input[type='checkbox'] {
+			margin-right: 0.5rem;
+			width: 18px;
+			height: 18px;
+		}
+
+		.calc-checkbox-label {
+			color: #e0e0e0;
+			font-size: 0.95rem;
+		}
+
+		.calc-row {
+			display: flex;
+			gap: 1.2rem;
+			margin-bottom: 1.2rem;
+			flex-wrap: wrap;
+		}
+
+		.calc-col {
+			flex: 1;
+			min-width: 200px;
+		}
+
+		.calc-result {
+			background: rgba(255, 255, 255, 0.07);
+			padding: 1.8rem;
+			border-radius: 10px;
+			margin-top: 2rem;
+			border: 1px solid rgba(255, 255, 255, 0.1);
+		}
+
+		.calc-result-row {
+			margin-bottom: 0.7rem;
+			color: #e0e0e0;
+			font-size: 1.05rem;
+		}
+
+		.calc-total {
+			font-size: 1.6rem;
+			font-weight: bold;
+			color: #fff;
+			margin-top: 1.2rem;
+			padding-top: 1.2rem;
+			border-top: 1px solid rgba(255, 255, 255, 0.15);
+		}
+
+		.calc-breakdown {
+			margin-top: 1.2rem;
+			font-size: 0.95rem;
+			color: #e0e0e0;
+			background: rgba(0, 0, 0, 0.15);
+			padding: 1rem;
+			border-radius: 8px;
+		}
+
+		.calc-breakdown-item {
+			display: flex;
+			justify-content: space-between;
+			margin-bottom: 0.4rem;
+			padding: 0.3rem 0;
+		}
+
+		.calc-input-field option {
+			background: #2d3436;
+			color: #fff;
+		}
+
+		.calc-input-field[type='number'] {
+			-moz-appearance: textfield;
+		}
+
+		.calc-input-field[type='number']::-webkit-outer-spin-button,
+		.calc-input-field[type='number']::-webkit-inner-spin-button {
+			-webkit-appearance: none;
+			margin: 0;
+		}
+
+		.calc-note {
+			font-size: 0.85rem;
+			color: #e0e0e0;
+			margin-top: 1rem;
+			font-style: italic;
+			text-align: left !important;
+		}
+
+		.calc-tab-container {
+			display: flex;
+			margin-bottom: 1.8rem;
+			flex-wrap: wrap;
+			gap: 4px;
+		}
+
+		.calc-tab {
+			flex: 1;
+			padding: 0.9rem 0.5rem;
+			text-align: center !important;
+			background: rgba(255, 255, 255, 0.05);
+			color: #e0e0e0;
+			border: 1px solid rgba(255, 255, 255, 0.1);
+			cursor: pointer;
+			transition: all 0.3s ease;
+			min-width: 90px;
+			border-radius: 6px;
+			font-weight: 500;
+		}
+
+		.calc-tab.active {
+			background: rgba(255, 255, 255, 0.15);
+			color: #fff;
+			font-weight: bold;
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+			border-color: rgba(255, 255, 255, 0.2);
+		}
+
+		.calc-tab:hover:not(.active) {
+			background: rgba(255, 255, 255, 0.1);
+		}
+
+		.calc-calculator-section {
+			display: none;
+		}
+
+		.calc-calculator-section.active {
+			display: block;
+		}
+
+		.calc-info-box {
+			background: rgba(255, 255, 255, 0.08);
+			padding: 1.2rem;
+			border-radius: 8px;
+			margin-bottom: 1.8rem;
+			font-size: 0.95rem;
+			line-height: 1.5;
+			border-left: 3px solid rgba(255, 255, 255, 0.2);
+		}
+
+		.calc-unit-label {
+			position: absolute;
+			right: 10px;
+			top: 50%;
+			transform: translateY(-50%);
+			color: rgba(255, 255, 255, 0.6);
+		}
+
+		.calc-input-with-unit {
+			position: relative;
+		}
+
+		.calc-font-preview {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 8px;
+			margin-top: 8px;
+		}
+
+		.calc-font-item {
+			padding: 8px;
+			border-radius: 4px;
+			background: rgba(255, 255, 255, 0.05);
+			font-size: 1.2rem;
+			min-width: 100px;
+			text-align: left !important;
+		}
+
+		.calc-font-times {
+			font-family: 'Times New Roman', Times, serif;
+		}
+		.calc-font-arial {
+			font-family: Arial, sans-serif;
+		}
+		.calc-font-charlemagne {
+			font-family: 'Charlemagne', serif;
+		}
+		.calc-font-corsiva {
+			font-family: 'Monotype Corsiva', 'Apple Chancery', cursive;
+		}
+		.calc-font-snell {
+			font-family: 'Snell Roundhand', 'Script MT Bold', cursive;
+		}
+		.calc-font-copperplate {
+			font-family: 'Copperplate Gothic', 'Copperplate', serif;
+		}
+
+		/* Responsive adjustments */
+		@media (max-width: 768px) {
+			.calc-calculator {
+				padding: 1.5rem;
+			}
+
+			.calc-row {
+				flex-direction: column;
+				gap: 0.8rem;
+			}
+
+			.calc-col {
+				width: 100%;
+			}
+
+			.calc-tab {
+				min-width: 80px;
+				padding: 0.8rem 0.4rem;
+				font-size: 0.9rem;
+			}
+		}
+	</style>
+
+	<div class="calc-calculator">
+		<div class="calc-calculator-content">
+			<h2 class="calc-calculator-title">Slate Products Calculator</h2>
+
+			<div class="calc-tab-container">
+				<div class="calc-tab active" data-tab="hearth">Hearth</div>
+				<div class="calc-tab" data-tab="shower">Shower Tray</div>
+				<div class="calc-tab" data-tab="sign">Slate Signs</div>
+				<div class="calc-tab" data-tab="paving">Paving</div>
+				<div class="calc-tab" data-tab="flooring">Flooring & Wall Tiles</div>
+			</div>
+
+			<!-- Hearth Calculator Section -->
+			<div id="calc-hearth-section" class="calc-calculator-section active">
+				<div class="calc-row">
+					<div class="calc-col">
+						<div class="calc-input-group">
+							<label class="calc-input-label">Color</label>
+							<select id="calc-hearth-color" class="calc-input-field">
+								<option value="graphite">Graphite Black Riven Slate</option>
+								<option value="blue">Blue Grey Riven Slate</option>
+							</select>
+						</div>
+					</div>
+					<div class="calc-col">
+						<div class="calc-input-group">
+							<label class="calc-input-label">Thickness</label>
+							<select id="calc-hearth-thickness" class="calc-input-field">
+								<option value="25">25mm</option>
+								<option value="40">40mm</option>
+							</select>
+						</div>
+					</div>
+				</div>
+
+				<div class="calc-input-group">
+					<label class="calc-input-label">Select Size</label>
+					<select id="calc-hearth-size" class="calc-input-field">
+						<!-- Sizes will be populated by JavaScript -->
+					</select>
+				</div>
+
+				<div class="calc-input-group">
+					<label class="calc-input-label">Shape (Cutting Charge)</label>
+					<select id="calc-hearth-shape" class="calc-input-field">
+						<option value="rectangle">Square or Rectangle - £30.00</option>
+						<option value="tshape">T Shape - £90.00</option>
+						<option value="teardrop">Tear Drop - £100.00</option>
+						<option value="quadrant">Quadrant - £80.00</option>
+						<option value="dshape">D Shape - £80.00</option>
+						<option value="custom">Cut to Template - Custom</option>
+					</select>
+				</div>
+
+				<div class="calc-input-group">
+					<label class="calc-input-label">Edge Profile</label>
+					<select id="calc-hearth-edge-profile" class="calc-input-field">
+						<option value="sawn">Sawn Cut - £0.00</option>
+						<option value="pencil">Pencil Edge - £20.00</option>
+						<option value="half-bullnose">Half Bullnose - £25.00</option>
+						<option value="full-bullnose">Full Bullnose - £45.00</option>
+						<option value="aged">Aged Edge - £40.00</option>
+						<option value="5mm-chamfer">5mm Chamfer - £20.00</option>
+						<option value="10mm-chamfer">10mm Chamfer - £45.00</option>
+					</select>
+				</div>
+
+				<div class="calc-input-group">
+					<label class="calc-input-label">Surface Finish</label>
+					<select id="calc-hearth-surface-finish" class="calc-input-field">
+						<option value="natural">Natural Riven - £0.00</option>
+						<option value="lightly-honed-polished">
+							Lightly Honed (with polished edge) - £0.00
+						</option>
+						<option value="lightly-honed-sawn">
+							Lightly Honed (with sawn edges) - £20.00
+						</option>
+						<option value="hand-polished">Hand Polished - £40.00</option>
+					</select>
+				</div>
+
+				<div class="calc-input-group">
+					<div class="calc-checkbox-group">
+						<input type="checkbox" id="calc-hearth-adhesive" />
+						<label class="calc-checkbox-label" for="calc-hearth-adhesive"
+							>Add 20kg bag of flexible adhesive (£17.50)</label
+						>
+					</div>
+				</div>
+
+				<div class="calc-input-group">
+					<label class="calc-input-label">Quantity</label>
+					<input
+						type="number"
+						id="calc-hearth-quantity"
+						class="calc-input-field"
+						min="1"
+					/>
+				</div>
+			</div>
+
+			<!-- Shower Tray Calculator Section -->
+			<div id="calc-shower-section" class="calc-calculator-section">
+				<div class="calc-info-box">
+					The waste, as standard, will be placed 250mm in from the edges of the
+					slate.<br />
+					All shower trays have a 50mm wide border on all sides as standard.<br />
+					The border on a 25mm shower tray is 3mm high; the fall is 8mm.<br />
+					The border on a 40mm shower tray is 6mm high; the fall is 16mm.<br />
+					Each shower tray is supplied with a circular, chrome effect waste.
+				</div>
+
+				<div class="calc-row">
+					<div class="calc-col">
+						<div class="calc-input-group">
+							<label class="calc-input-label">Color</label>
+							<select id="calc-shower-color" class="calc-input-field">
+								<option value="graphite">Graphite Black Riven Slate</option>
+								<option value="blue">Blue Grey Riven Slate</option>
+							</select>
+						</div>
+					</div>
+					<div class="calc-col">
+						<div class="calc-input-group">
+							<label class="calc-input-label">Thickness</label>
+							<select id="calc-shower-thickness" class="calc-input-field">
+								<option value="25">25mm</option>
+								<option value="40">40mm</option>
+							</select>
+						</div>
+					</div>
+				</div>
+
+				<div class="calc-input-group">
+					<label class="calc-input-label">Select Size</label>
+					<select id="calc-shower-size" class="calc-input-field">
+						<!-- Sizes will be populated by JavaScript -->
+					</select>
+				</div>
+
+				<div class="calc-input-group">
+					<label class="calc-input-label">Waste Location</label>
+					<select id="calc-shower-waste-location" class="calc-input-field">
+						<option value="central">Central</option>
+						<option value="corner">To one corner</option>
+						<option value="short-side">Central on one short side</option>
+						<option value="long-side">Central on one long side</option>
+					</select>
+				</div>
+
+				<div class="calc-input-group">
+					<label class="calc-input-label">Quantity</label>
+					<input
+						type="number"
+						id="calc-shower-quantity"
+						class="calc-input-field"
+						min="1"
+					/>
+				</div>
+			</div>
+
+			<!-- Slate Signs Calculator Section -->
+			<div id="calc-sign-section" class="calc-calculator-section">
+				<div class="calc-info-box">
+					Signs are made in 20mm thick slate as standard. If you would like a
+					different thickness please contact us.<br />
+					Please get in touch if you require a sign over 600 x 300mm, would like
+					images or more than two lines.<br />
+					We have included a selection of our most popular fonts as examples,
+					you can select any font available!
+				</div>
+
+				<div class="calc-row">
+					<div class="calc-col">
+						<div class="calc-input-group">
+							<label class="calc-input-label">Color</label>
+							<select id="calc-sign-color-type" class="calc-input-field">
+								<option value="graphite">Graphite Black Riven Slate</option>
+								<option value="blue">Blue Grey Riven Slate</option>
+							</select>
+						</div>
+					</div>
+				</div>
+
+				<div class="calc-input-group">
+					<label class="calc-input-label">Sign Type</label>
+					<select id="calc-sign-type" class="calc-input-field">
+						<option value="standard">Standard Sign - £80.00</option>
+						<option value="houseNumber">House Number - £55.00</option>
+						<option value="houseSign">House Sign (One Line) - £85.00</option>
+						<option value="houseSignTwo">
+							House Sign (Two Lines) - £105.00
+						</option>
+						<option value="imageSign">Image/Logo Sign - £130.00</option>
+					</select>
+				</div>
+
+				<div class="calc-row">
+					<div class="calc-col">
+						<div class="calc-input-group">
+							<label class="calc-input-label">Width</label>
+							<div class="calc-input-with-unit">
+								<input
+									type="number"
+									id="calc-sign-width"
+									class="calc-input-field"
+									value="300"
+									min="100"
+									max="600"
+									step="10"
+								/>
+								<span class="calc-unit-label">mm</span>
+							</div>
+						</div>
+					</div>
+					<div class="calc-col">
+						<div class="calc-input-group">
+							<label class="calc-input-label">Height</label>
+							<div class="calc-input-with-unit">
+								<input
+									type="number"
+									id="calc-sign-height"
+									class="calc-input-field"
+									value="150"
+									min="100"
+									max="300"
+									step="10"
+								/>
+								<span class="calc-unit-label">mm</span>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="calc-input-group">
+					<label class="calc-input-label">Font</label>
+					<select id="calc-sign-font" class="calc-input-field">
+						<option value="times">Times New Roman</option>
+						<option value="arial">Arial</option>
+						<option value="charlemagne">Charlemagne</option>
+						<option value="corsiva">Monotype Corsiva</option>
+						<option value="snell">Snell Roundhand Script</option>
+						<option value="copperplate">Copperplate Gothic</option>
+					</select>
+					<div class="calc-font-preview">
+						<div class="calc-font-item calc-font-times">Abc</div>
+						<div class="calc-font-item calc-font-arial">Abc</div>
+						<div class="calc-font-item calc-font-charlemagne">Abc</div>
+						<div class="calc-font-item calc-font-corsiva">Abc</div>
+						<div class="calc-font-item calc-font-snell">Abc</div>
+						<div class="calc-font-item calc-font-copperplate">Abc</div>
+					</div>
+				</div>
+
+				<div class="calc-input-group">
+					<label class="calc-input-label">Infill Color</label>
+					<select id="calc-sign-color" class="calc-input-field">
+						<option value="white">White</option>
+						<option value="gold">Gold</option>
+						<option value="silver">Silver</option>
+					</select>
+				</div>
+
+				<div class="calc-input-group">
+					<label class="calc-input-label">Border</label>
+					<select id="calc-sign-border" class="calc-input-field">
+						<option value="none">None - £0</option>
+						<option value="border">Border - £10</option>
+					</select>
+				</div>
+
+				<div class="calc-input-group">
+					<label class="calc-input-label">Fixing Method</label>
+					<select id="calc-sign-fixing" class="calc-input-field">
+						<option value="none">None - £0</option>
+						<option value="drilled">2x drilled holes - £0</option>
+						<option value="hidden">2x hidden fixing rods in back - £20</option>
+					</select>
+				</div>
+
+				<div class="calc-input-group">
+					<label class="calc-input-label">Text for Sign</label>
+					<textarea
+						id="calc-sign-text"
+						class="calc-input-field"
+						rows="2"
+						placeholder="Enter your text here"
+					></textarea>
+				</div>
+
+				<div class="calc-input-group">
+					<label class="calc-input-label">Quantity</label>
+					<input
+						type="number"
+						id="calc-sign-quantity"
+						class="calc-input-field"
+						min="1"
+					/>
+				</div>
+			</div>
+
+			<!-- Flooring Section -->
+			<div id="calc-flooring-section" class="calc-calculator-section">
+				<div class="calc-input-group">
+					<label class="calc-input-label">Tile Type</label>
+					<select id="calc-flooring-type" class="calc-input-field">
+						<option value="graphite-riven">
+							Brazilian Graphite Black Riven Slate
+						</option>
+						<option value="blue-riven">Brazilian Blue Grey Riven Slate</option>
+						<option value="graphite-polished">
+							Brazilian Graphite Black Hand Polished Slate
+						</option>
+					</select>
+				</div>
+
+				<div class="calc-input-group">
+					<label class="calc-input-label">Tile Size</label>
+					<select id="calc-flooring-size" class="calc-input-field">
+						<!-- Will be populated by JavaScript -->
+					</select>
+				</div>
+
+				<div class="calc-input-group">
+					<label class="calc-input-label">Application</label>
+					<select id="calc-flooring-application" class="calc-input-field">
+						<option value="floor">Floor Tiles</option>
+						<option value="wall">Wall Tiles</option>
+						<option value="both">Both Floor & Wall</option>
+					</select>
+				</div>
+
+				<div class="calc-row">
+					<div class="calc-col">
+						<div class="calc-input-group">
+							<label class="calc-input-label">Area Width</label>
+							<div class="calc-input-with-unit">
+								<input
+									type="number"
+									id="calc-flooring-width"
+									class="calc-input-field"
+									value="1"
+									min="0.1"
+									step="0.1"
+								/>
+								<span class="calc-unit-label">m</span>
+							</div>
+						</div>
+					</div>
+					<div class="calc-col">
+						<div class="calc-input-group">
+							<label class="calc-input-label">Area Length</label>
+							<div class="calc-input-with-unit">
+								<input
+									type="number"
+									id="calc-flooring-length"
+									class="calc-input-field"
+									value="1"
+									min="0.1"
+									step="0.1"
+								/>
+								<span class="calc-unit-label">m</span>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="calc-input-group">
+					<div class="calc-checkbox-group">
+						<input type="checkbox" id="calc-flooring-wastage" checked />
+						<label class="calc-checkbox-label" for="calc-flooring-wastage"
+							>Add 10% for cuts/wastage (recommended)</label
+						>
+					</div>
+				</div>
+			</div>
+
+			<!-- Paving Section -->
+			<div id="calc-paving-section" class="calc-calculator-section">
+				<div class="calc-input-group">
+					<label class="calc-input-label">Paving Type</label>
+					<select id="calc-paving-type" class="calc-input-field">
+						<option value="brazilian-graphite">
+							Brazilian Graphite Black Riven Slate
+						</option>
+						<option value="brazilian-blue">
+							Brazilian Blue Grey Riven Slate
+						</option>
+						<option value="tumbled-slate">Tumbled Slate Cobbles</option>
+						<option value="tumbled-black-limestone-cobbles">
+							Tumbled Black Limestone Cobbles
+						</option>
+						<option value="yellow-limestone">Yellow Limestone</option>
+						<option value="lime-ash">Lime Ash</option>
+						<option value="juparana-granite">Juparana Granite</option>
+						<option value="cathedral-ashlar">Cathedral Ashlar</option>
+					</select>
+				</div>
+
+				<div class="calc-input-group">
+					<label class="calc-input-label">Size Category</label>
+					<select id="calc-paving-size" class="calc-input-field">
+						<!-- Will be populated by JavaScript -->
+					</select>
+				</div>
+
+				<div class="calc-input-group">
+					<label class="calc-input-label">Size & Price</label>
+					<select id="calc-paving-detail" class="calc-input-field">
+						<!-- Will be populated by JavaScript -->
+					</select>
+				</div>
+
+				<div class="calc-row">
+					<div class="calc-col">
+						<div class="calc-input-group">
+							<label class="calc-input-label">Area Width</label>
+							<div class="calc-input-with-unit">
+								<input
+									type="number"
+									id="calc-paving-width"
+									class="calc-input-field"
+									value="1"
+									min="0.1"
+									step="0.1"
+								/>
+								<span class="calc-unit-label">m</span>
+							</div>
+						</div>
+					</div>
+					<div class="calc-col">
+						<div class="calc-input-group">
+							<label class="calc-input-label">Area Length</label>
+							<div class="calc-input-with-unit">
+								<input
+									type="number"
+									id="calc-paving-length"
+									class="calc-input-field"
+									value="1"
+									min="0.1"
+									step="0.1"
+								/>
+								<span class="calc-unit-label">m</span>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="calc-input-group">
+					<div class="calc-checkbox-group">
+						<input type="checkbox" id="calc-paving-wastage" checked />
+						<label class="calc-checkbox-label" for="calc-paving-wastage"
+							>Add 10% for cuts/wastage (recommended)</label
+						>
+					</div>
+				</div>
+			</div>
+
+			<div class="calc-result">
+				<div class="calc-result-row">
+					Selected Product: <span id="calc-product-type">Hearth</span>
+				</div>
+				<div class="calc-result-row">
+					Selected Size: <span id="calc-selected-size">1200 x 450 x 25mm</span>
+				</div>
+				<div class="calc-result-row">
+					Price per Unit: £<span id="calc-price-per-unit">85.00</span>
+				</div>
+
+				<div id="calc-hearth-breakdown" class="calc-breakdown">
+					<div class="calc-breakdown-item">
+						<span>Base Price:</span>
+						<span>£<span id="calc-breakdown-base">85.00</span></span>
+					</div>
+					<div class="calc-breakdown-item">
+						<span>Shape Cutting:</span>
+						<span>£<span id="calc-breakdown-shape">30.00</span></span>
+					</div>
+					<div class="calc-breakdown-item">
+						<span>Edge Profile:</span>
+						<span>£<span id="calc-breakdown-edge">0.00</span></span>
+					</div>
+					<div class="calc-breakdown-item">
+						<span>Surface Finish:</span>
+						<span>£<span id="calc-breakdown-finish">0.00</span></span>
+					</div>
+					<div class="calc-breakdown-item">
+						<span>Adhesive:</span>
+						<span>£<span id="calc-breakdown-adhesive">0.00</span></span>
+					</div>
+					<div class="calc-breakdown-item">
+						<span>Quantity:</span>
+						<span><span id="calc-breakdown-quantity">1</span></span>
+					</div>
+				</div>
+
+				<div
+					id="calc-shower-breakdown"
+					class="calc-breakdown"
+					style="display: none"
+				>
+					<div class="calc-breakdown-item">
+						<span>Base Price:</span>
+						<span>£<span id="calc-shower-breakdown-base">550.00</span></span>
+					</div>
+					<div class="calc-breakdown-item">
+						<span>Waste Location:</span>
+						<span><span id="calc-shower-breakdown-waste">Central</span></span>
+					</div>
+					<div class="calc-breakdown-item">
+						<span>Quantity:</span>
+						<span><span id="calc-shower-breakdown-quantity">1</span></span>
+					</div>
+				</div>
+
+				<div
+					id="calc-tile-breakdown"
+					class="calc-breakdown"
+					style="display: none"
+				>
+					<div class="calc-breakdown-item">
+						<span>Rate per m²:</span>
+						<span>£<span id="calc-tile-breakdown-rate">50.00</span></span>
+					</div>
+					<div class="calc-breakdown-item">
+						<span>Area Width:</span>
+						<span><span id="calc-tile-breakdown-width">1</span> m</span>
+					</div>
+					<div class="calc-breakdown-item">
+						<span>Area Length:</span>
+						<span><span id="calc-tile-breakdown-length">1</span> m</span>
+					</div>
+					<div class="calc-breakdown-item">
+						<span>Total Area:</span>
+						<span><span id="calc-tile-breakdown-area">1</span> m²</span>
+					</div>
+					<div class="calc-breakdown-item">
+						<span>Wastage (10%):</span>
+						<span><span id="calc-tile-breakdown-wastage">Included</span></span>
+					</div>
+				</div>
+
+				<div
+					id="calc-sign-breakdown"
+					class="calc-breakdown"
+					style="display: none"
+				>
+					<div class="calc-breakdown-item">
+						<span>Sign Type:</span>
+						<span
+							><span id="calc-sign-breakdown-type">Standard Sign</span></span
+						>
+					</div>
+					<div class="calc-breakdown-item">
+						<span>Base Price:</span>
+						<span>£<span id="calc-sign-breakdown-base">80.00</span></span>
+					</div>
+					<div class="calc-breakdown-item">
+						<span>Border:</span>
+						<span>£<span id="calc-sign-breakdown-border">0.00</span></span>
+					</div>
+					<div class="calc-breakdown-item">
+						<span>Fixing:</span>
+						<span>£<span id="calc-sign-breakdown-fixing">0.00</span></span>
+					</div>
+					<div class="calc-breakdown-item">
+						<span>Size:</span>
+						<span><span id="calc-sign-breakdown-size">300 x 150</span> mm</span>
+					</div>
+					<div class="calc-breakdown-item">
+						<span>Quantity:</span>
+						<span><span id="calc-sign-breakdown-quantity">1</span></span>
+					</div>
+				</div>
+
+				<div
+					id="calc-flooring-breakdown"
+					class="calc-breakdown"
+					style="display: none"
+				>
+					<div class="calc-breakdown-item">
+						<span>Product:</span>
+						<span
+							><span id="calc-flooring-breakdown-product"
+								>Brazilian Graphite Black Riven Slate</span
+							></span
+						>
+					</div>
+					<div class="calc-breakdown-item">
+						<span>Size:</span>
+						<span
+							><span id="calc-flooring-breakdown-size"
+								>1200 x 900 x 12mm</span
+							></span
+						>
+					</div>
+					<div class="calc-breakdown-item">
+						<span>Application:</span>
+						<span
+							><span id="calc-flooring-breakdown-application"
+								>Floor Tiles</span
+							></span
+						>
+					</div>
+					<div class="calc-breakdown-item">
+						<span>Rate per m²:</span>
+						<span>£<span id="calc-flooring-breakdown-rate">50.00</span></span>
+					</div>
+					<div class="calc-breakdown-item">
+						<span>Area Width:</span>
+						<span><span id="calc-flooring-breakdown-width">1</span> m</span>
+					</div>
+					<div class="calc-breakdown-item">
+						<span>Area Length:</span>
+						<span><span id="calc-flooring-breakdown-length">1</span> m</span>
+					</div>
+					<div class="calc-breakdown-item">
+						<span>Total Area:</span>
+						<span><span id="calc-flooring-breakdown-area">1</span> m²</span>
+					</div>
+					<div class="calc-breakdown-item">
+						<span>Wastage (10%):</span>
+						<span
+							><span id="calc-flooring-breakdown-wastage">Included</span></span
+						>
+					</div>
+				</div>
+
+				<!-- Add a paving breakdown section -->
+				<div
+					id="calc-paving-breakdown"
+					class="calc-breakdown"
+					style="display: none"
+				>
+					<div class="calc-breakdown-item">
+						<span>Paving Type:</span>
+						<span
+							><span id="calc-paving-breakdown-type"
+								>Brazilian Graphite Black Riven Slate</span
+							></span
+						>
+					</div>
+					<div class="calc-breakdown-item">
+						<span>Size Category:</span>
+						<span
+							><span id="calc-paving-breakdown-category"
+								>Single Size</span
+							></span
+						>
+					</div>
+					<div class="calc-breakdown-item">
+						<span>Size:</span>
+						<span
+							><span id="calc-paving-breakdown-size"
+								>900 x 600 x 20mm</span
+							></span
+						>
+					</div>
+					<div class="calc-breakdown-item">
+						<span>Rate per m²:</span>
+						<span>£<span id="calc-paving-breakdown-rate">37.00</span></span>
+					</div>
+					<div class="calc-breakdown-item">
+						<span>Area Width:</span>
+						<span><span id="calc-paving-breakdown-width">1</span> m</span>
+					</div>
+					<div class="calc-breakdown-item">
+						<span>Area Length:</span>
+						<span><span id="calc-paving-breakdown-length">1</span> m</span>
+					</div>
+					<div class="calc-breakdown-item">
+						<span>Total Area:</span>
+						<span><span id="calc-paving-breakdown-area">1</span> m²</span>
+					</div>
+					<div class="calc-breakdown-item">
+						<span>Wastage (10%):</span>
+						<span
+							><span id="calc-paving-breakdown-wastage">Included</span></span
+						>
+					</div>
+				</div>
+
+				<div class="calc-total">
+					Total Cost: £<span id="calc-total-cost">115.00</span>
+				</div>
+			</div>
+
+			<p class="calc-note">All prices shown are before VAT & delivery</p>
+			<p class="calc-note">
+				If you require anything outside of our standard options please contact
+				us to discuss further.
+			</p>
+		</div>
+	</div>
+
+	<script>
+		// Data Objects
+		const HEARTH_DATA = {
+			graphite: {
+				25: {
+					'1200x450': 85.0,
+					'1500x450': 95.0,
+					'1800x450': 100.0,
+					'1200x650': 110.0,
+					'1500x650': 130.0,
+					'1800x650': 140.0,
+					'2300x650': 175.0,
+					'900x900': 100.0,
+					'1200x900': 140.0,
+					'1500x900': 165.0,
+					'1800x900': 190.0,
+					'2300x900': 295.0,
+					'1000x1000': 120.0,
+					'1200x1200': 190.0,
+					'1500x1500': 320.0,
+					'2000x1000': 350.0,
+					'2300x1300': 425.0
+				},
+				40: {
+					'1200x900': 225.0,
+					'1500x900': 300.0,
+					'1800x950': 310.0,
+					'2250x950': 445.0,
+					'2000x1000': 500.0,
+					'2250x1300': 570.0
+				}
+			},
+			blue: {
+				25: {
+					'1800x450': 100.0,
+					'1800x650': 140.0,
+					'1200x900': 140.0,
+					'1500x900': 165.0,
+					'1800x900': 190.0,
+					'2300x1300': 425.0
+				}
+			}
+		};
+
+		const SHOWER_DATA = {
+			graphite: {
+				25: {
+					'1200x900': 550.0,
+					'1500x900': 650.0,
+					'1800x900': 750.0,
+					'2300x900': 850.0,
+					'2300x1300': 950.0
+				},
+				40: {
+					'1200x900': 650.0,
+					'1500x900': 750.0,
+					'1800x900': 850.0,
+					'2300x900': 950.0,
+					'2250x1300': 1050.0
+				}
+			},
+			blue: {
+				25: {
+					'1200x900': 550.0,
+					'1500x900': 650.0,
+					'1800x900': 750.0,
+					'2300x1300': 950.0
+				}
+			}
+		};
+
+		const TILE_DATA = {
+			'graphite-riven': {
+				'1200x900': 50.0,
+				'1200x600': 42.5,
+				'900x900': 40.0,
+				'900x600': 30.0,
+				'600x600': 30.0,
+				'600x400': 24.5,
+				'600x300': 23.5,
+				'400x400': 22.5,
+				'400x200': 22.0
+			},
+			'blue-riven': {
+				'900x900': 40.0,
+				'900x600': 30.0,
+				'600x600': 30.0,
+				'600x400': 24.5,
+				'400x400': 22.5
+			},
+			'graphite-polished': {
+				'900x900': 45.0,
+				'900x600': 45.0,
+				'600x600': 45.0,
+				'600x300': 45.0
+			}
+		};
+
+		const FLOORING_DATA = {
+			'graphite-riven': {
+				'1200x900': 50.0,
+				'1200x600': 42.5,
+				'900x900': 40.0,
+				'900x600': 30.0,
+				'600x600': 30.0,
+				'600x400': 24.5,
+				'600x300': 23.5,
+				'400x400': 22.5,
+				'400x200': 22.0
+			},
+			'blue-riven': {
+				'900x900': 40.0,
+				'900x600': 30.0,
+				'600x600': 30.0,
+				'600x400': 24.5,
+				'400x400': 22.5
+			},
+			'graphite-polished': {
+				'900x900': 45.0,
+				'900x600': 45.0,
+				'600x600': 45.0,
+				'600x300': 45.0
+			}
+		};
+
+		const PAVING_DATA = {
+			'brazilian-graphite': {
+				single: {
+					'900x600': 37.0
+				},
+				three: {
+					'900x600': 37.0,
+					'600x600': 37.0,
+					'600x295': 37.0
+				}
+			},
+			'brazilian-blue': {
+				single: {
+					'900x600': 37.0
+				}
+			},
+			'tumbled-slate': {
+				single: {
+					'100x100': 45.0,
+					'300x150': 35.0
+				},
+				three: {
+					'100x150': 65.0,
+					'150x150': 65.0,
+					'200x150': 65.0
+				}
+			},
+			'tumbled-black-limestone-cobbles': {
+				single: {
+					'150x150': 24.0,
+					'300x75': 24.0,
+					'300x150': 24.0
+				}
+			},
+			'yellow-limestone': {
+				message:
+					'For price please submit enquiry form with quantity needed and postcode for delivery',
+				four: {
+					'900x600': 0.0, // Price requires inquiry
+					'600x600': 0.0, // Price requires inquiry
+					'600x290': 0.0, // Price requires inquiry
+					'290x290': 0.0 // Price requires inquiry
+				}
+			},
+			'lime-ash': {
+				single: {
+					'900x600': 45.0
+				},
+				four: {
+					'900x600': 45.0,
+					'600x600': 45.0,
+					'600x290': 45.0,
+					'290x290': 45.0
+				}
+			},
+			'juparana-granite': {
+				single: {
+					'900x600': 45.0
+				}
+			},
+			'cathedral-ashlar': {
+				mixed: {
+					'400-900': 40.0
+				}
+			}
+		};
+
+		const SIGN_TYPE_PRICES = {
+			standard: {
+				basePrice: 80.0,
+				name: 'Standard Sign'
+			},
+			houseNumber: {
+				basePrice: 55.0,
+				name: 'House Number'
+			},
+			houseSign: {
+				basePrice: 85.0,
+				name: 'House Sign (One Line)'
+			},
+			houseSignTwo: {
+				basePrice: 105.0,
+				name: 'House Sign (Two Lines)'
+			},
+			imageSign: {
+				basePrice: 130.0,
+				name: 'Image/Logo Sign'
+			}
+		};
+
+		const SIGN_BORDER_PRICES = {
+			none: 0.0,
+			border: 10.0
+		};
+
+		const SIGN_FIXING_PRICES = {
+			none: 0.0,
+			drilled: 0.0,
+			hidden: 20.0
+		};
+
+		const CUTTING_CHARGES = {
+			rectangle: 30.0,
+			tshape: 90.0,
+			teardrop: 100.0,
+			quadrant: 80.0,
+			dshape: 80.0,
+			custom: 0.0
+		};
+
+		const EDGE_PROFILES = {
+			sawn: 0.0,
+			pencil: 20.0,
+			'half-bullnose': 25.0,
+			'full-bullnose': 45.0,
+			aged: 40.0,
+			'5mm-chamfer': 20.0,
+			'10mm-chamfer': 45.0
+		};
+
+		const SURFACE_FINISHES = {
+			natural: 0.0,
+			'lightly-honed-polished': 0.0,
+			'lightly-honed-sawn': 20.0,
+			'hand-polished': 40.0
+		};
+
+		const ADHESIVE_PRICE = 17.5;
+
+		// Hearth Calculator Functions
+		function populateHearthThicknessOptions() {
+			const color = document.getElementById('calc-hearth-color').value;
+			const thicknessSelect = document.getElementById('calc-hearth-thickness');
+
+			const currentThickness = thicknessSelect.value;
+
+			thicknessSelect.innerHTML = '';
+
+			const availableThicknesses = Object.keys(HEARTH_DATA[color] || {});
+
+			for (const thickness of availableThicknesses) {
+				const option = document.createElement('option');
+				option.value = thickness;
+				option.textContent = `${thickness}mm`;
+				thicknessSelect.appendChild(option);
+			}
+
+			if (availableThicknesses.includes(currentThickness)) {
+				thicknessSelect.value = currentThickness;
+			}
+
+			populateHearthSizeOptions();
+		}
+
+		function populateHearthSizeOptions() {
+			const color = document.getElementById('calc-hearth-color').value;
+			const thicknessSelect = document.getElementById('calc-hearth-thickness');
+			const sizeSelect = document.getElementById('calc-hearth-size');
+
+			const thickness = thicknessSelect.value;
+
+			sizeSelect.innerHTML = '';
+
+			if (HEARTH_DATA[color] && HEARTH_DATA[color][thickness]) {
+				const sizes = HEARTH_DATA[color][thickness];
+
+				for (const [size, price] of Object.entries(sizes)) {
+					const [width, height] = size.split('x');
+					const option = document.createElement('option');
+					option.value = size;
+					option.textContent = `${width} x ${height} x ${thickness}mm - £${price.toFixed(
+						2
+					)}`;
+					sizeSelect.appendChild(option);
+				}
+			} else {
+				const option = document.createElement('option');
+				option.value = '';
+				option.textContent = 'No sizes available for this combination';
+				sizeSelect.appendChild(option);
+			}
+
+			calculateHearthPrice();
+		}
+
+		function calculateHearthPrice() {
+			const color = document.getElementById('calc-hearth-color').value;
+			const thickness = document.getElementById('calc-hearth-thickness').value;
+			const sizeSelect = document.getElementById('calc-hearth-size');
+			const quantityInput = document.getElementById('calc-hearth-quantity');
+			const shapeSelect = document.getElementById('calc-hearth-shape').value;
+			const edgeProfileSelect = document.getElementById(
+				'calc-hearth-edge-profile'
+			).value;
+			const surfaceFinishSelect = document.getElementById(
+				'calc-hearth-surface-finish'
+			).value;
+			const adhesiveCheckbox = document.getElementById(
+				'calc-hearth-adhesive'
+			).checked;
+
+			const quantity = parseInt(quantityInput.value) || 1;
+
+			const selectedSize = sizeSelect.value;
+
+			if (!selectedSize) {
+				document.getElementById('calc-selected-size').textContent =
+					'No size selected';
+				document.getElementById('calc-price-per-unit').textContent = '0.00';
+				document.getElementById('calc-total-cost').textContent = '0.00';
+				return;
+			}
+
+			const basePrice = HEARTH_DATA[color][thickness][selectedSize];
+
+			const cuttingCharge = CUTTING_CHARGES[shapeSelect];
+
+			const edgeCharge = EDGE_PROFILES[edgeProfileSelect];
+
+			const finishCharge = SURFACE_FINISHES[surfaceFinishSelect];
+
+			const adhesiveCharge = adhesiveCheckbox ? ADHESIVE_PRICE : 0;
+
+			const totalPerUnit =
+				basePrice + cuttingCharge + edgeCharge + finishCharge + adhesiveCharge;
+
+			const totalCost = totalPerUnit * quantity;
+
+			const [width, height] = selectedSize.split('x');
+			document.getElementById(
+				'calc-selected-size'
+			).textContent = `${width} x ${height} x ${thickness}mm`;
+			document.getElementById('calc-price-per-unit').textContent =
+				totalPerUnit.toFixed(2);
+
+			document.getElementById('calc-breakdown-base').textContent =
+				basePrice.toFixed(2);
+			document.getElementById('calc-breakdown-shape').textContent =
+				cuttingCharge.toFixed(2);
+			document.getElementById('calc-breakdown-edge').textContent =
+				edgeCharge.toFixed(2);
+			document.getElementById('calc-breakdown-finish').textContent =
+				finishCharge.toFixed(2);
+			document.getElementById('calc-breakdown-adhesive').textContent =
+				adhesiveCharge.toFixed(2);
+			document.getElementById('calc-breakdown-quantity').textContent = quantity;
+
+			document.getElementById('calc-total-cost').textContent =
+				totalCost.toFixed(2);
+		}
+
+		function initHearthCalculator() {
+			document
+				.getElementById('calc-hearth-color')
+				.addEventListener('change', populateHearthThicknessOptions);
+			document
+				.getElementById('calc-hearth-thickness')
+				.addEventListener('change', populateHearthSizeOptions);
+			document
+				.getElementById('calc-hearth-size')
+				.addEventListener('change', calculateHearthPrice);
+			document
+				.getElementById('calc-hearth-shape')
+				.addEventListener('change', calculateHearthPrice);
+			document
+				.getElementById('calc-hearth-edge-profile')
+				.addEventListener('change', calculateHearthPrice);
+			document
+				.getElementById('calc-hearth-surface-finish')
+				.addEventListener('change', calculateHearthPrice);
+			document
+				.getElementById('calc-hearth-adhesive')
+				.addEventListener('change', calculateHearthPrice);
+			document
+				.getElementById('calc-hearth-quantity')
+				.addEventListener('input', calculateHearthPrice);
+
+			populateHearthThicknessOptions();
+		}
+
+		// Shower Calculator Functions
+		function populateShowerThicknessOptions() {
+			const color = document.getElementById('calc-shower-color').value;
+			const thicknessSelect = document.getElementById('calc-shower-thickness');
+
+			const currentThickness = thicknessSelect.value;
+
+			thicknessSelect.innerHTML = '';
+
+			const availableThicknesses = Object.keys(SHOWER_DATA[color] || {});
+
+			for (const thickness of availableThicknesses) {
+				const option = document.createElement('option');
+				option.value = thickness;
+				option.textContent = `${thickness}mm`;
+				thicknessSelect.appendChild(option);
+			}
+
+			if (availableThicknesses.includes(currentThickness)) {
+				thicknessSelect.value = currentThickness;
+			}
+
+			populateShowerSizeOptions();
+		}
+
+		function populateShowerSizeOptions() {
+			const color = document.getElementById('calc-shower-color').value;
+			const thickness = document.getElementById('calc-shower-thickness').value;
+			const sizeSelect = document.getElementById('calc-shower-size');
+
+			sizeSelect.innerHTML = '';
+
+			if (SHOWER_DATA[color] && SHOWER_DATA[color][thickness]) {
+				const sizes = SHOWER_DATA[color][thickness];
+
+				for (const [size, price] of Object.entries(sizes)) {
+					const [width, height] = size.split('x');
+					const option = document.createElement('option');
+					option.value = size;
+					option.textContent = `${width} x ${height} x ${thickness}mm - £${price.toFixed(
+						2
+					)}`;
+					sizeSelect.appendChild(option);
+				}
+			} else {
+				const option = document.createElement('option');
+				option.value = '';
+				option.textContent = 'No sizes available for this combination';
+				sizeSelect.appendChild(option);
+			}
+
+			calculateShowerPrice();
+		}
+
+		function calculateShowerPrice() {
+			const color = document.getElementById('calc-shower-color').value;
+			const thickness = document.getElementById('calc-shower-thickness').value;
+			const sizeSelect = document.getElementById('calc-shower-size');
+			const wasteLocation = document.getElementById(
+				'calc-shower-waste-location'
+			).value;
+			const quantityInput = document.getElementById('calc-shower-quantity');
+
+			const quantity = parseInt(quantityInput.value) || 1;
+
+			const selectedSize = sizeSelect.value;
+
+			if (!selectedSize) {
+				document.getElementById('calc-selected-size').textContent =
+					'No size selected';
+				document.getElementById('calc-price-per-unit').textContent = '0.00';
+				document.getElementById('calc-total-cost').textContent = '0.00';
+				return;
+			}
+
+			const basePrice = SHOWER_DATA[color][thickness][selectedSize];
+
+			const totalPerUnit = basePrice;
+
+			const totalCost = totalPerUnit * quantity;
+
+			const [width, height] = selectedSize.split('x');
+			document.getElementById(
+				'calc-selected-size'
+			).textContent = `${width} x ${height} x ${thickness}mm`;
+			document.getElementById('calc-price-per-unit').textContent =
+				totalPerUnit.toFixed(2);
+
+			document.getElementById('calc-shower-breakdown-base').textContent =
+				basePrice.toFixed(2);
+
+			const wasteLocationText = {
+				central: 'Central',
+				corner: 'To one corner',
+				'short-side': 'Central on one short side',
+				'long-side': 'Central on one long side'
+			}[wasteLocation];
+
+			document.getElementById('calc-shower-breakdown-waste').textContent =
+				wasteLocationText;
+			document.getElementById('calc-shower-breakdown-quantity').textContent =
+				quantity;
+
+			document.getElementById('calc-total-cost').textContent =
+				totalCost.toFixed(2);
+		}
+
+		function initShowerCalculator() {
+			document
+				.getElementById('calc-shower-color')
+				.addEventListener('change', populateShowerThicknessOptions);
+			document
+				.getElementById('calc-shower-thickness')
+				.addEventListener('change', populateShowerSizeOptions);
+			document
+				.getElementById('calc-shower-size')
+				.addEventListener('change', calculateShowerPrice);
+			document
+				.getElementById('calc-shower-waste-location')
+				.addEventListener('change', calculateShowerPrice);
+			document
+				.getElementById('calc-shower-quantity')
+				.addEventListener('input', calculateShowerPrice);
+
+			populateShowerThicknessOptions();
+		}
+
+		// Sign Calculator Functions
+		function calculateSignPrice() {
+			const width =
+				parseInt(document.getElementById('calc-sign-width').value) || 300;
+			const height =
+				parseInt(document.getElementById('calc-sign-height').value) || 150;
+			const border = document.getElementById('calc-sign-border').value;
+			const fixing = document.getElementById('calc-sign-fixing').value;
+			const signType = document.getElementById('calc-sign-type').value;
+			const quantityInput = document.getElementById('calc-sign-quantity');
+
+			const quantity = parseInt(quantityInput.value) || 1;
+
+			const basePrice = SIGN_TYPE_PRICES[signType].basePrice;
+
+			const borderCharge = SIGN_BORDER_PRICES[border];
+
+			const fixingCharge = SIGN_FIXING_PRICES[fixing];
+
+			const totalPerUnit = basePrice + borderCharge + fixingCharge;
+
+			const totalCost = totalPerUnit * quantity;
+
+			document.getElementById(
+				'calc-selected-size'
+			).textContent = `${width} x ${height} x 20mm`;
+			document.getElementById('calc-price-per-unit').textContent =
+				totalPerUnit.toFixed(2);
+
+			document.getElementById('calc-sign-breakdown-type').textContent =
+				SIGN_TYPE_PRICES[signType].name;
+			document.getElementById('calc-sign-breakdown-base').textContent =
+				basePrice.toFixed(2);
+			document.getElementById('calc-sign-breakdown-border').textContent =
+				borderCharge.toFixed(2);
+			document.getElementById('calc-sign-breakdown-fixing').textContent =
+				fixingCharge.toFixed(2);
+			document.getElementById(
+				'calc-sign-breakdown-size'
+			).textContent = `${width} x ${height}`;
+			document.getElementById('calc-sign-breakdown-quantity').textContent =
+				quantity;
+
+			// Add slate color to the breakdown
+			const colorText =
+				document.getElementById('calc-sign-color-type').value === 'graphite'
+					? 'Graphite Black Riven Slate'
+					: 'Blue Grey Riven Slate';
+			if (!document.getElementById('calc-sign-breakdown-slate-color')) {
+				const colorItem = document.createElement('div');
+				colorItem.className = 'calc-breakdown-item';
+				colorItem.innerHTML = `<span>Slate Color:</span><span><span id="calc-sign-breakdown-slate-color">${colorText}</span></span>`;
+				document
+					.getElementById('calc-sign-breakdown')
+					.insertBefore(
+						colorItem,
+						document.getElementById('calc-sign-breakdown').firstChild
+					);
+			} else {
+				document.getElementById('calc-sign-breakdown-slate-color').textContent =
+					colorText;
+			}
+
+			document.getElementById('calc-total-cost').textContent =
+				totalCost.toFixed(2);
+		}
+
+		function initSignCalculator() {
+			document
+				.getElementById('calc-sign-type')
+				.addEventListener('change', calculateSignPrice);
+			document
+				.getElementById('calc-sign-color-type')
+				.addEventListener('change', calculateSignPrice);
+			document
+				.getElementById('calc-sign-width')
+				.addEventListener('input', calculateSignPrice);
+			document
+				.getElementById('calc-sign-height')
+				.addEventListener('input', calculateSignPrice);
+			document
+				.getElementById('calc-sign-border')
+				.addEventListener('change', calculateSignPrice);
+			document
+				.getElementById('calc-sign-fixing')
+				.addEventListener('change', calculateSignPrice);
+			document
+				.getElementById('calc-sign-quantity')
+				.addEventListener('input', calculateSignPrice);
+
+			calculateSignPrice();
+		}
+
+		// Flooring Calculator Functions
+		function populateFlooringSizeOptions() {
+			const flooringType = document.getElementById('calc-flooring-type').value;
+			const sizeSelect = document.getElementById('calc-flooring-size');
+
+			sizeSelect.innerHTML = '';
+
+			if (FLOORING_DATA[flooringType]) {
+				const sizes = FLOORING_DATA[flooringType];
+
+				for (const [size, price] of Object.entries(sizes)) {
+					const [width, height] = size.split('x');
+					const option = document.createElement('option');
+					option.value = size;
+					option.textContent = `${width} x ${height} x 12mm - £${price.toFixed(
+						2
+					)}/m²`;
+					sizeSelect.appendChild(option);
+				}
+			} else {
+				const option = document.createElement('option');
+				option.value = '';
+				option.textContent = 'No sizes available for this type';
+				sizeSelect.appendChild(option);
+			}
+
+			calculateFlooringPrice();
+		}
+
+		function calculateFlooringPrice() {
+			const flooringType = document.getElementById('calc-flooring-type').value;
+			const sizeSelect = document.getElementById('calc-flooring-size');
+			const applicationSelect = document.getElementById(
+				'calc-flooring-application'
+			);
+			const widthInput = document.getElementById('calc-flooring-width');
+			const lengthInput = document.getElementById('calc-flooring-length');
+			const wastageCheckbox = document.getElementById(
+				'calc-flooring-wastage'
+			).checked;
+
+			const selectedSize = sizeSelect.value;
+
+			if (!selectedSize) {
+				document.getElementById('calc-selected-size').textContent =
+					'No size selected';
+				document.getElementById('calc-price-per-unit').textContent = '0.00';
+				document.getElementById('calc-total-cost').textContent = '0.00';
+				return;
+			}
+
+			const ratePerSqm = FLOORING_DATA[flooringType][selectedSize];
+
+			const width = parseFloat(widthInput.value) || 0;
+			const length = parseFloat(lengthInput.value) || 0;
+
+			const area = width * length;
+
+			const finalArea = wastageCheckbox ? area * 1.1 : area;
+
+			const totalCost = finalArea * ratePerSqm;
+
+			const [tileWidth, tileHeight] = selectedSize.split('x');
+			const sizeText = `${tileWidth} x ${tileHeight} x 12mm`;
+
+			let productName = 'Brazilian Graphite Black Riven Slate';
+			if (flooringType === 'blue-riven') {
+				productName = 'Brazilian Blue Grey Riven Slate';
+			} else if (flooringType === 'graphite-polished') {
+				productName = 'Brazilian Graphite Black Hand Polished Slate';
+			}
+
+			document.getElementById('calc-selected-size').textContent = sizeText;
+			document.getElementById('calc-price-per-unit').textContent =
+				ratePerSqm.toFixed(2);
+
+			document.getElementById('calc-flooring-breakdown-product').textContent =
+				productName;
+			document.getElementById('calc-flooring-breakdown-size').textContent =
+				sizeText;
+			document.getElementById(
+				'calc-flooring-breakdown-application'
+			).textContent =
+				applicationSelect.options[applicationSelect.selectedIndex].text;
+			document.getElementById('calc-flooring-breakdown-rate').textContent =
+				ratePerSqm.toFixed(2);
+			document.getElementById('calc-flooring-breakdown-width').textContent =
+				width.toFixed(1);
+			document.getElementById('calc-flooring-breakdown-length').textContent =
+				length.toFixed(1);
+			document.getElementById('calc-flooring-breakdown-area').textContent =
+				finalArea.toFixed(2);
+			document.getElementById('calc-flooring-breakdown-wastage').textContent =
+				wastageCheckbox ? 'Included' : 'Not included';
+
+			document.getElementById('calc-total-cost').textContent =
+				totalCost.toFixed(2);
+		}
+
+		function initFlooringCalculator() {
+			document
+				.getElementById('calc-flooring-type')
+				.addEventListener('change', populateFlooringSizeOptions);
+			document
+				.getElementById('calc-flooring-size')
+				.addEventListener('change', calculateFlooringPrice);
+			document
+				.getElementById('calc-flooring-application')
+				.addEventListener('change', calculateFlooringPrice);
+			document
+				.getElementById('calc-flooring-width')
+				.addEventListener('input', calculateFlooringPrice);
+			document
+				.getElementById('calc-flooring-length')
+				.addEventListener('input', calculateFlooringPrice);
+			document
+				.getElementById('calc-flooring-wastage')
+				.addEventListener('change', calculateFlooringPrice);
+
+			populateFlooringSizeOptions();
+		}
+
+		// Paving Calculator Functions
+		function populatePavingSizeOptions() {
+			const pavingType = document.getElementById('calc-paving-type').value;
+			const sizeCategorySelect = document.getElementById('calc-paving-size');
+			const detailSelect = document.getElementById('calc-paving-detail');
+			const messageContainer =
+				document.getElementById('calc-paving-message-container') ||
+				createMessageContainer();
+
+			sizeCategorySelect.innerHTML = '';
+			detailSelect.innerHTML = '';
+			messageContainer.style.display = 'none';
+			messageContainer.textContent = '';
+
+			if (
+				pavingType === 'yellow-limestone' &&
+				PAVING_DATA[pavingType].message
+			) {
+				messageContainer.textContent = PAVING_DATA[pavingType].message;
+				messageContainer.style.display = 'block';
+			}
+
+			if (PAVING_DATA[pavingType]) {
+				const categories = Object.keys(PAVING_DATA[pavingType]).filter(
+					(key) => key !== 'message'
+				);
+
+				categories.forEach((category) => {
+					const option = document.createElement('option');
+					option.value = category;
+					let text = category;
+
+					if (category === 'single') {
+						text = 'Single Size Sizes';
+					} else if (category === 'three') {
+						text = 'Three Sizes Patio Mix';
+					} else if (category === 'four') {
+						text = 'Four Sizes Patio Mix';
+					} else if (category === 'mixed') {
+						text = 'Mixed Length Sizes';
+					}
+
+					option.textContent = text;
+					sizeCategorySelect.appendChild(option);
+				});
+			} else {
+				const option = document.createElement('option');
+				option.value = '';
+				option.textContent = 'No sizes available for this type';
+				sizeCategorySelect.appendChild(option);
+			}
+
+			updatePavingDetailOptions();
+		}
+
+		function createMessageContainer() {
+			const container = document.createElement('div');
+			container.id = 'calc-paving-message-container';
+
+			container.style.backgroundColor = '#444444';
+			container.style.padding = '10px';
+			container.style.marginBottom = '15px';
+			container.style.borderRadius = '4px';
+			container.style.fontWeight = 'bold';
+			container.style.display = 'none';
+
+			// Try to find the parent element using the closest method
+			const sizeGroup = document
+				.getElementById('calc-paving-size')
+				.closest('.calc-input-group');
+
+			if (sizeGroup && sizeGroup.parentNode) {
+				sizeGroup.parentNode.insertBefore(container, sizeGroup.nextSibling);
+			} else {
+				// Fallback - insert after the size select element directly
+				const sizeSelect = document.getElementById('calc-paving-size');
+				if (sizeSelect && sizeSelect.parentNode) {
+					sizeSelect.parentNode.insertBefore(container, sizeSelect.nextSibling);
+				} else {
+					// Last resort - append to the paving section
+					document.getElementById('calc-paving-section').appendChild(container);
+				}
+			}
+
+			return container;
+		}
+
+		function updatePavingDetailOptions() {
+			const pavingType = document.getElementById('calc-paving-type').value;
+			const sizeCategory = document.getElementById('calc-paving-size').value;
+			const detailSelect = document.getElementById('calc-paving-detail');
+
+			detailSelect.innerHTML = '';
+
+			if (PAVING_DATA[pavingType] && PAVING_DATA[pavingType][sizeCategory]) {
+				const sizes = PAVING_DATA[pavingType][sizeCategory];
+
+				for (const [size, price] of Object.entries(sizes)) {
+					let dimensions = size.split('x');
+					let thickness = '20';
+
+					if (
+						pavingType === 'tumbled-slate' &&
+						sizeCategory === 'single' &&
+						size === '100x100'
+					) {
+						thickness = '10-15';
+					} else if (
+						pavingType === 'tumbled-slate' &&
+						sizeCategory === 'three'
+					) {
+						thickness = '30-35';
+					} else if (pavingType === 'lime-ash') {
+						thickness = '22';
+					}
+
+					const option = document.createElement('option');
+					option.value = size;
+					option.textContent = `${dimensions[0]} x ${
+						dimensions[1]
+					} x ${thickness}mm - £${price.toFixed(2)}/m²`;
+					detailSelect.appendChild(option);
+				}
+			} else {
+				const option = document.createElement('option');
+				option.value = '';
+				option.textContent = 'No sizes available for this category';
+				detailSelect.appendChild(option);
+			}
+
+			calculatePavingPrice();
+		}
+
+		function calculatePavingPrice() {
+			const pavingType = document.getElementById('calc-paving-type').value;
+			const sizeCategory = document.getElementById('calc-paving-size').value;
+			const detailSelect = document.getElementById('calc-paving-detail');
+			const widthInput = document.getElementById('calc-paving-width');
+			const lengthInput = document.getElementById('calc-paving-length');
+			const wastageCheckbox = document.getElementById(
+				'calc-paving-wastage'
+			).checked;
+
+			// Set default values if they're not already set
+			if (!widthInput.value) widthInput.value = 1;
+			if (!lengthInput.value) lengthInput.value = 1;
+
+			const selectedSize = detailSelect.value;
+			const selectedOption = detailSelect.options[detailSelect.selectedIndex];
+
+			if (!selectedSize || !selectedOption) {
+				document.getElementById('calc-selected-size').textContent =
+					'No size selected';
+				document.getElementById('calc-price-per-unit').textContent = '0.00';
+				document.getElementById('calc-total-cost').textContent = '0.00';
+				return;
+			}
+
+			const ratePerSqm = PAVING_DATA[pavingType][sizeCategory][selectedSize];
+
+			const width = parseFloat(widthInput.value) || 0;
+			const length = parseFloat(lengthInput.value) || 0;
+
+			const area = width * length;
+
+			const finalArea = wastageCheckbox ? area * 1.1 : area;
+
+			const totalCost = finalArea * ratePerSqm;
+
+			const sizeMatch = selectedOption.text.match(
+				/(\d+)\s*x\s*(\d+)\s*x\s*(\d+(?:-\d+)?)/
+			);
+			const sizeText = sizeMatch
+				? `${sizeMatch[1]} x ${sizeMatch[2]} x ${sizeMatch[3]}mm`
+				: selectedOption.text;
+
+			document.getElementById('calc-selected-size').textContent = sizeText;
+			document.getElementById('calc-price-per-unit').textContent =
+				ratePerSqm.toFixed(2);
+
+			// Update paving breakdown
+			let pavingTypeName = '';
+			if (pavingType === 'brazilian-graphite') {
+				pavingTypeName = 'Brazilian Graphite Black Riven Slate';
+			} else if (pavingType === 'brazilian-blue') {
+				pavingTypeName = 'Brazilian Blue Grey Riven Slate';
+			} else if (pavingType === 'tumbled-slate') {
+				pavingTypeName = 'Tumbled Slate Cobbles';
+			} else if (pavingType === 'tumbled-black-limestone-cobbles') {
+				pavingTypeName = 'Tumbled Black Limestone Cobbles';
+			} else if (pavingType === 'yellow-limestone') {
+				pavingTypeName = 'Yellow Limestone';
+			} else if (pavingType === 'lime-ash') {
+				pavingTypeName = 'Lime Ash';
+			} else if (pavingType === 'juparana-granite') {
+				pavingTypeName = 'Juparana Granite';
+			} else if (pavingType === 'cathedral-ashlar') {
+				pavingTypeName = 'Cathedral Ashlar';
+			}
+
+			let categoryName = '';
+			if (sizeCategory === 'single') {
+				categoryName = 'Single Size';
+			} else if (sizeCategory === 'three') {
+				categoryName = 'Three Sizes Patio Mix';
+			} else if (sizeCategory === 'four') {
+				categoryName = 'Four Sizes Patio Mix';
+			} else if (sizeCategory === 'mixed') {
+				categoryName = 'Mixed Length Sizes';
+			}
+
+			document.getElementById('calc-paving-breakdown-type').textContent =
+				pavingTypeName;
+			document.getElementById('calc-paving-breakdown-category').textContent =
+				categoryName;
+			document.getElementById('calc-paving-breakdown-size').textContent =
+				sizeText;
+			document.getElementById('calc-paving-breakdown-rate').textContent =
+				ratePerSqm.toFixed(2);
+			document.getElementById('calc-paving-breakdown-width').textContent =
+				width.toFixed(1);
+			document.getElementById('calc-paving-breakdown-length').textContent =
+				length.toFixed(1);
+			document.getElementById('calc-paving-breakdown-area').textContent =
+				finalArea.toFixed(2);
+			document.getElementById('calc-paving-breakdown-wastage').textContent =
+				wastageCheckbox ? 'Included' : 'Not included';
+
+			document.getElementById('calc-total-cost').textContent =
+				totalCost.toFixed(2);
+		}
+
+		function initPavingCalculator() {
+			document
+				.getElementById('calc-paving-type')
+				.addEventListener('change', populatePavingSizeOptions);
+			document
+				.getElementById('calc-paving-size')
+				.addEventListener('change', updatePavingDetailOptions);
+			document
+				.getElementById('calc-paving-detail')
+				.addEventListener('change', calculatePavingPrice);
+			document
+				.getElementById('calc-paving-width')
+				.addEventListener('input', calculatePavingPrice);
+			document
+				.getElementById('calc-paving-length')
+				.addEventListener('input', calculatePavingPrice);
+			document
+				.getElementById('calc-paving-wastage')
+				.addEventListener('change', calculatePavingPrice);
+
+			populatePavingSizeOptions();
+		}
+
+		// Tab Switching Functionality
+		function initTabSwitching() {
+			const tabs = document.querySelectorAll('.calc-tab');
+			const sections = document.querySelectorAll('.calc-calculator-section');
+
+			tabs.forEach((tab) => {
+				tab.addEventListener('click', () => {
+					const tabId = tab.getAttribute('data-tab');
+
+					tabs.forEach((t) => t.classList.remove('active'));
+					tab.classList.add('active');
+
+					sections.forEach((section) => section.classList.remove('active'));
+					document
+						.getElementById(`calc-${tabId}-section`)
+						.classList.add('active');
+
+					updateProductTypeAndBreakdown(tabId);
+
+					calculatePriceForTab(tabId);
+				});
+			});
+		}
+
+		function updateProductTypeAndBreakdown(tabId) {
+			let productName = 'Hearth';
+			if (tabId === 'shower') productName = 'Shower Tray';
+			if (tabId === 'sign') productName = 'Slate Sign';
+			if (tabId === 'paving') productName = 'Paving';
+			if (tabId === 'flooring') productName = 'Flooring & Wall Tiles';
+			document.getElementById('calc-product-type').textContent = productName;
+
+			document.getElementById('calc-hearth-breakdown').style.display =
+				tabId === 'hearth' ? 'block' : 'none';
+			document.getElementById('calc-shower-breakdown').style.display =
+				tabId === 'shower' ? 'block' : 'none';
+			document.getElementById('calc-sign-breakdown').style.display =
+				tabId === 'sign' ? 'block' : 'none';
+			document.getElementById('calc-flooring-breakdown').style.display =
+				tabId === 'flooring' ? 'block' : 'none';
+			document.getElementById('calc-paving-breakdown').style.display =
+				tabId === 'paving' ? 'block' : 'none';
+		}
+
+		function calculatePriceForTab(tabId) {
+			if (tabId === 'hearth') {
+				calculateHearthPrice();
+			} else if (tabId === 'shower') {
+				calculateShowerPrice();
+			} else if (tabId === 'sign') {
+				calculateSignPrice();
+			} else if (tabId === 'paving') {
+				calculatePavingPrice();
+			} else if (tabId === 'flooring') {
+				calculateFlooringPrice();
+			}
+		}
+
+		document.addEventListener('DOMContentLoaded', function () {
+			initTabSwitching();
+			initHearthCalculator();
+			initShowerCalculator();
+			initSignCalculator();
+			initFlooringCalculator();
+			initPavingCalculator();
+			calculateHearthPrice();
+		});
+	</script>
+</div>
