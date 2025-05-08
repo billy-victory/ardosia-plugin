@@ -1,16 +1,15 @@
 <?php
 /**
- * Plugin Name: Ardosia Calculator Modules
- * Plugin URI:  https://victory.digital/
+ * Plugin Name: Ardosi Calculator Modules
+ * Plugin URI:  https://example.com/
  * Description: Provides shortcodes for various calculators and tools, starting with a Calculator for Ardosi.
- * Author:      Victory Digital
+ * Version:     1.0.0
+ * Author:      Your Name
  * Author URI:  https://victory.digital
  * License:     GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: pps-modules
  * Domain Path: /languages
- * Version:     1.0.1
- * Update URI:  https://git-updater.com
  */
 
 // Exit if accessed directly.
@@ -25,12 +24,8 @@ define( 'PPS_MODULES_URL', plugin_dir_url( __FILE__ ) );
 /**
  * Include necessary files
  */
-require_once __DIR__ . '/vendor/autoload.php';
 require_once PPS_MODULES_PATH . 'inc/frontend.php';
 require_once PPS_MODULES_PATH . 'inc/email.php';
-
-// Initialize Git Updater Lite
-( new \Fragen\Git_Updater\Lite( __FILE__ ) )->run();
 
 /**
  * Enqueue scripts and styles for the frontend.

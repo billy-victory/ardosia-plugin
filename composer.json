@@ -10,6 +10,7 @@
 		}
 	],
 	"require": {
-		"kucrut/vite-for-wp": "^0.9.1"
+		"kucrut/vite-for-wp": "^0.9.1",
+		"afragen/git-updater-lite": "^2"
 	}
 }
