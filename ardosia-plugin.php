@@ -9,7 +9,7 @@
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: pps-modules
  * Domain Path: /languages
- * Version:     1.0.5
+ * Version:     1.0.9
  * Update URI:  https://git-updater.com
  */
 
