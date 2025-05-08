@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Ardosia Calculator Modules
  * Plugin URI:  https://victory.digital/
- * Description: Provides shortcodes for various calculators and tools, starting with a Calculator for Ardosi.
+ * Description: Provides shortcodes for various calculators and tools, starting with a Calculator for Ardosia.
  * Author:      Victory Digital
  * Author URI:  https://victory.digital
  * License:     GPLv2 or later
