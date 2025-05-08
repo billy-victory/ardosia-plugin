@@ -47,6 +47,35 @@ add_filter( 'gu_lite_repo_url', function( $url, $file ) {
  */
 require_once PPS_MODULES_PATH . 'inc/frontend.php';
 require_once PPS_MODULES_PATH . 'inc/email.php';
+require_once PPS_MODULES_PATH . 'inc/admin.php'; // Include the admin functionality
+
+/**
+ * Create database tables on plugin activation
+ */
+function pps_modules_activate() {
+	global $wpdb;
+	$charset_collate = $wpdb->get_charset_collate();
+	$table_name = $wpdb->prefix . 'pps_quotes';
+
+	$sql = "CREATE TABLE $table_name (
+		id mediumint(9) NOT NULL AUTO_INCREMENT,
+		time datetime DEFAULT CURRENT_TIMESTAMP NOT NULL,
+		email varchar(100) NOT NULL,
+		postcode varchar(20) DEFAULT '' NOT NULL,
+		paving_type varchar(255) NOT NULL,
+		size_option varchar(255) NOT NULL,
+		size_detail varchar(255) NOT NULL,
+		area float NOT NULL,
+		price_per_sqm float NOT NULL,
+		total_cost float NOT NULL,
+		quote_data longtext NOT NULL,
+		PRIMARY KEY  (id)
+	) $charset_collate;";
+
+	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+	dbDelta( $sql );
+}
+register_activation_hook( __FILE__, 'pps_modules_activate' );
 
 /**
  * Enqueue scripts and styles for the frontend.
