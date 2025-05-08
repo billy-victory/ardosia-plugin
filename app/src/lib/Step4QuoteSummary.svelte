@@ -13,6 +13,18 @@
 		onUpdateEmail,
 	} = $props();
 
+	// Add state for postcode
+	let postcode = $state("");
+
+	function updatePostcode(value) {
+		postcode = value;
+	}
+
+	// Update onSendEmail to include postcode
+	function handleSendEmail() {
+		onSendEmail(postcode);
+	}
+
 	console.log("Quote prop:", quote); // Log the quote prop whenever it changes
 </script>
 
@@ -117,13 +129,25 @@
 							oninput={(event) => onUpdateEmail(event.target.value)}
 						/>
 					</div>
+					<div class="apc-modal-input-group">
+						<label for="postcode" class="apc-input-label">Postcode</label>
+						<input
+							type="text"
+							id="postcode"
+							class="apc-input-field"
+							placeholder="Enter your postcode"
+							value={postcode}
+							oninput={(event) => updatePostcode(event.target.value)}
+						/>
+					</div>
 					<div class="apc-modal-actions">
 						<button
 							class="apc-button apc-button-secondary"
 							onclick={onCloseEmailModal}>Cancel</button
 						>
-						<button class="apc-button apc-button-primary" onclick={onSendEmail}
-							>Send Email</button
+						<button
+							class="apc-button apc-button-primary"
+							onclick={handleSendEmail}>Send Email</button
 						>
 					</div>
 				</div>

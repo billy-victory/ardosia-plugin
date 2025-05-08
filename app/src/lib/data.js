@@ -60,14 +60,10 @@ export const pavingTypes = [
 export const sizeOptions = {
 	"brazilian-graphite": [
 		{
-			id: "single-size",
-			name: "Single Size Sizes",
-			description: "Uniform size for consistent patterns",
-		},
-		{
 			id: "three-sizes",
-			name: "Three Sizes Patio Mix",
+			name: "Three Sizes Mix",
 			description: "Varied sizes for traditional layouts",
+			isMix: true, // Mark as a mix that includes all sizes
 		},
 	],
 	"brazilian-blue-grey": [
@@ -80,14 +76,10 @@ export const sizeOptions = {
 	],
 	"tumbled-slate": [
 		{
-			id: "single-size",
-			name: "Single Size Sizes",
-			description: "Uniform size for consistent patterns",
-		},
-		{
 			id: "three-sizes",
-			name: "Three Sizes Patio Mix",
+			name: "Three Sizes Mix",
 			description: "Varied sizes for traditional layouts",
+			isMix: true, // Mark as a mix that includes all sizes
 		},
 	],
 	"tumbled-limestone": [
@@ -101,8 +93,9 @@ export const sizeOptions = {
 	"yellow-limestone": [
 		{
 			id: "four-sizes",
-			name: "Four Sizes Patio Mix",
-			description: "Maximum variety for natural appearance",
+			name: "Four Sizes Mix",
+			description: "Varied sizes for traditional layouts",
+			isMix: true, // Mark as a mix that includes all sizes
 		},
 	],
 	"lime-ash": [
@@ -113,8 +106,9 @@ export const sizeOptions = {
 		},
 		{
 			id: "four-sizes",
-			name: "Four Sizes Patio Mix",
-			description: "Maximum variety for natural appearance",
+			name: "Four Sizes Mix",
+			description: "Varied sizes for traditional layouts",
+			isMix: true, // Mark as a mix that includes all sizes
 		},
 	],
 	"juparana-granite": [
@@ -128,8 +122,9 @@ export const sizeOptions = {
 		// Mapping 'mixed' from PAVING_DATA to 'three-sizes' based on existing sizeDetails logic
 		{
 			id: "three-sizes",
-			name: "Three Sizes Patio Mix", // Corresponds to 'mixed' in PAVING_DATA for this type
-			description: "Varied sizes for traditional layouts",
+			name: "Various Lengths", // Updated name
+			description: "Varied lengths for traditional layouts",
+			isMix: true, // Mark as a mix that includes all sizes
 		},
 	],
 };
@@ -137,7 +132,7 @@ export const sizeOptions = {
 // Size specific options with prices
 export const sizeDetails = {
 	"brazilian-graphite": {
-		"single-size": [{ size: "900x600 x 20 mm", price: 37.0 }],
+		// "single-size": [{ size: "900x600 x 20 mm", price: 37.0 }],
 		"three-sizes": [
 			{ size: "900 x 600 x 20 mm", price: 37.0 },
 			{ size: "600 x 600 x 20 mm", price: 37.0 },
@@ -190,6 +185,6 @@ export const sizeDetails = {
 	},
 	"cathedral-ashlar": {
 		// Mapping 'mixed' from new data to 'three-sizes' as it's an existing option for this type.
-		"three-sizes": [{ size: "400-900 x 20 mm", price: 40.0 }],
+		"three-sizes": [{ size: "400 x 900 x 600 x 20 mm", price: 40.0 }],
 	},
 };

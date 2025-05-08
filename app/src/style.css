@@ -387,6 +387,41 @@
 	color: var(--text-muted-color);
 }
 
+/* Styles for area input mode toggle */
+.apc-input-mode-toggle {
+	display: flex;
+	justify-content: center;
+	margin-bottom: 20px;
+	gap: 10px;
+}
+
+.apc-toggle-button {
+	padding: 8px 16px;
+	background-color: var(--card-background-color);
+	border: 1px solid var(--border-color);
+	border-radius: 6px;
+	color: var(--text-color);
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+.apc-toggle-button:hover {
+	background-color: var(--selected-background-color);
+	border-color: var(--primary-color);
+}
+
+.apc-toggle-button.apc-toggle-active {
+	background-color: var(--primary-color);
+	border-color: var(--primary-color-dark);
+	color: white;
+}
+
+.apc-area-only-grid {
+	max-width: 400px;
+	margin: 0 auto;
+}
+
 /* --- Quote Summary --- */
 .apc-quote-summary-card {
 	background: var(--card-background-color);
@@ -632,4 +667,44 @@
 		border-radius: 0.75rem;
 		max-width: 98vw;
 	}
+}
+
+/* Add new styles at the end of the file */
+
+/* Styles for the mix option display */
+.apc-mix-option-message {
+	background-color: var(--card-background-color);
+	border: 1px solid var(--border-color);
+	border-radius: 1rem;
+	padding: 20px;
+	margin-bottom: 24px;
+}
+
+.apc-mix-sizes-info {
+	margin-bottom: 16px;
+}
+
+.apc-mix-sizes-info h3 {
+	font-size: 16px;
+	margin-bottom: 12px;
+	font-weight: 600;
+	color: var(--primary-color);
+}
+
+.apc-sizes-list {
+	list-style-type: disc;
+	padding-left: 20px;
+	margin-bottom: 12px;
+	color: var(--text-color);
+}
+
+.apc-sizes-list li {
+	margin-bottom: 6px;
+}
+
+.apc-mix-price {
+	font-weight: 600;
+	font-size: 16px;
+	color: var(--primary-color);
+	margin-top: 12px;
 }

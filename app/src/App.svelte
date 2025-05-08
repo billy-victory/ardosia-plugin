@@ -19,11 +19,14 @@
 	let selectedSizeDetail = $state(null); // Index of the detail
 	let length = $state(0);
 	let width = $state(0);
+	let directArea = $state(0); // New state for direct area input
+	let isDirectAreaMode = $state(false); // New state to track input mode
 
 	let showEmailModal = $state(false);
 	let recipientEmail = $state("");
 
-	let area = $derived(length * width);
+	// Calculate area based on current input mode
+	let area = $derived(isDirectAreaMode ? directArea : length * width);
 
 	// Derived state for selected items details
 	const pavingTypeDetails = $derived(
@@ -115,6 +118,15 @@
 	function handleSelectSizeOption(id) {
 		selectedSizeOption = id;
 		selectedSizeDetail = null; // Reset subsequent selections
+
+		// If this is a mix option that includes all sizes, auto-select the first size detail
+		const selectedOption = availableSizeOptions.find(
+			(option) => option.id === id,
+		);
+		if (selectedOption?.isMix && availableSizeDetails.length > 0) {
+			// Auto-select the first size detail for mix options
+			selectedSizeDetail = 0;
+		}
 	}
 
 	function handleSelectSizeDetail(index) {
@@ -127,6 +139,14 @@
 
 	function handleUpdateWidth(value) {
 		width = value;
+	}
+
+	function handleUpdateDirectArea(value) {
+		directArea = value;
+	}
+
+	function toggleAreaInputMode() {
+		isDirectAreaMode = !isDirectAreaMode;
 	}
 
 	function handleUpdateEmail(value) {
@@ -166,7 +186,7 @@
 		showEmailModal = false;
 	}
 
-	async function sendEmailFromModal() {
+	async function sendEmailFromModal(postcode) {
 		if (quote && recipientEmail) {
 			// Basic email validation (optional, enhance as needed)
 			if (!/\S+@\S+\.\S+/.test(recipientEmail)) {
@@ -180,6 +200,7 @@
 				formData.append("action", "pps_send_quote_email");
 				formData.append("quote", JSON.stringify(quote));
 				formData.append("email", recipientEmail);
+				formData.append("postcode", postcode || ""); // Add postcode to form data
 
 				const response = await fetch(
 					// @ts-ignore
@@ -263,6 +284,9 @@
 						{length}
 						{width}
 						{area}
+						{isDirectAreaMode}
+						onUpdateDirectArea={handleUpdateDirectArea}
+						{toggleAreaInputMode}
 						{isStep3NextDisabled}
 						onSelectSizeDetail={handleSelectSizeDetail}
 						onUpdateLength={handleUpdateLength}
