@@ -51,6 +51,26 @@
 			return null;
 		}
 
+		// Add requiresEnquiry to the quote object
+		const requiresEnquiry = pavingTypeDetails.requiresEnquiry || false;
+
+		// If requiresEnquiry is true, we can return a simplified quote object
+		if (requiresEnquiry) {
+			const result = {
+				pavingType: pavingTypeDetails.name,
+				sizeOption: sizeOptionDetails.name,
+				sizeDetail: sizeDetailData.size, // Still useful to show what was selected
+				area: area, // Area might still be relevant for enquiry
+				pricePerSqm: null, // Explicitly null
+				totalCost: null, // Explicitly null
+				requiresEnquiry: true,
+			};
+			if (isStep4) {
+				console.log("Quote calculated (enquiry required):", result);
+			}
+			return result;
+		}
+
 		// 2. Validate area: must be a positive number
 		const currentArea = area; // Capture derived value
 		if (
@@ -90,6 +110,7 @@
 			area: currentArea, // Use the validated area
 			pricePerSqm: pricePerSqm,
 			totalCost: totalCost,
+			requiresEnquiry: false, // Explicitly false for normal quotes
 		};
 
 		if (isStep4) {

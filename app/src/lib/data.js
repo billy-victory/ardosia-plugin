@@ -35,6 +35,7 @@ export const pavingTypes = [
 		name: "Yellow Limestone",
 		description: "Warm, golden tones with natural variations",
 		image: "/wp-content/uploads/2024/07/Yellow-Limestone-Dry-1-scaled.jpg",
+		requiresEnquiry: true,
 	},
 	{
 		id: "lime-ash",

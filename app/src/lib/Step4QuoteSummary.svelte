@@ -71,7 +71,9 @@
 						<div class="apc-quote-item">
 							<span class="apc-quote-label">Price per m²</span>
 							<span class="apc-quote-value">
-								{#if typeof quote.pricePerSqm === "number" && !isNaN(quote.pricePerSqm)}
+								{#if quote.requiresEnquiry}
+									<span class="apc-enquiry-price-text">Price on enquiry</span>
+								{:else if typeof quote.pricePerSqm === "number" && !isNaN(quote.pricePerSqm)}
 									£{quote.pricePerSqm.toFixed(2)}
 								{:else}
 									<span class="apc-error-text">Invalid Price</span>
@@ -81,7 +83,9 @@
 						<div class="apc-quote-total">
 							<span class="apc-quote-total-label">Total Cost</span>
 							<span class="apc-quote-total-value">
-								{#if typeof quote.totalCost === "number" && !isNaN(quote.totalCost)}
+								{#if quote.requiresEnquiry}
+									<span class="apc-enquiry-price-text">Price on enquiry</span>
+								{:else if typeof quote.totalCost === "number" && !isNaN(quote.totalCost)}
 									£{quote.totalCost.toFixed(2)}
 								{:else}
 									<span class="apc-error-text">Calculation Error</span>
@@ -183,6 +187,11 @@
 		margin-top: 8px; /* Add some space above */
 		display: block; /* Ensure it takes its own line if needed */
 		text-align: left; /* Align to the left */
+	}
+
+	.apc-enquiry-price-text {
+		font-weight: bold;
+		color: #3498db; /* Blue color for emphasis */
 	}
 
 	/* Add any other styles you need for this component below */

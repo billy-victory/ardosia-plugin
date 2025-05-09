@@ -33,6 +33,9 @@
 
 	// Check if we're dealing with a mix option that should bypass size selection
 	const isMixOption = $derived(!!sizeOptionDetails?.isMix);
+	const shouldShowEnquiryMessage = $derived(
+		!!pavingTypeDetails?.requiresEnquiry,
+	);
 </script>
 
 <div class="apc-step-container" id="step-3">
@@ -115,7 +118,11 @@
 					{/each}
 				</ul>
 				<p class="apc-mix-price">
-					Price: £{availableSizeDetails[0]?.price.toFixed(2)} per m²
+					{#if shouldShowEnquiryMessage}
+						<span class="apc-enquiry-price-text">Price on enquiry</span>
+					{:else}
+						Price: £{availableSizeDetails[0]?.price.toFixed(2)} per m²
+					{/if}
 				</p>
 			</div>
 			<p>Please enter the dimensions of your space below.</p>
@@ -215,3 +222,10 @@
 		</div>
 	</div>
 </div>
+
+<style>
+	.apc-enquiry-price-text {
+		font-weight: bold;
+		color: #3498db; /* Or your preferred color for this message */
+	}
+</style>

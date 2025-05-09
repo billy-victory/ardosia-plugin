@@ -39,6 +39,9 @@
 				<div>
 					<div class="apc-option-name">{type.name}</div>
 					<div class="apc-option-description">{type.description}</div>
+					<!-- {#if type.requiresEnquiry}
+						<div class="apc-enquiry-message-step1">Price requires enquiry</div>
+					{/if} -->
 				</div>
 			</button>
 		{/each}
@@ -57,3 +60,16 @@
 		</div>
 	</div>
 </div>
+
+<style>
+	/* .apc-enquiry-message-step1 {
+		color: #555; 
+		font-size: 0.85em; 
+		font-style: italic;
+		margin-top: 4px;
+		padding: 2px 4px;
+		background-color: #f0f0f0; 
+		border-radius: 3px;
+		text-align: center;
+	} */
+</style>

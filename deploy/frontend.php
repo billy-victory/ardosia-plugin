@@ -25,8 +25,7 @@ function pps_render_paving_calculator() {
     // Start output buffering
     ob_start();
     
-    // Add the title
-    echo '<h2 class="pps-calculator-main-title">Cost Calculator</h2>';
+   
     
     // Add custom CSS to fix styling issues and hide initial "Loading" text
     ?>
