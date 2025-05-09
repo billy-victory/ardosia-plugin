@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'PPS_MODULES_VERSION', '1.0.5' );
+define( 'PPS_MODULES_VERSION', '1.1.0' );
 define( 'PPS_MODULES_PATH', plugin_dir_path( __FILE__ ) );
 define( 'PPS_MODULES_URL', plugin_dir_url( __FILE__ ) );
 
