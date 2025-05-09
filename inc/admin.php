@@ -22,31 +22,84 @@ function pps_quotes_admin_page() {
     global $wpdb;
     $table_name = $wpdb->prefix . 'pps_quotes';
     
+    // Handle table creation if requested
+    if (isset($_GET['action']) && $_GET['action'] === 'create_table' && current_user_can('manage_options')) {
+        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+        
+        $charset_collate = $wpdb->get_charset_collate();
+        $sql = "CREATE TABLE $table_name (
+            id mediumint(9) NOT NULL AUTO_INCREMENT,
+            time datetime DEFAULT CURRENT_TIMESTAMP NOT NULL,
+            email varchar(100) NOT NULL,
+            postcode varchar(20) DEFAULT '' NOT NULL,
+            paving_type varchar(255) NOT NULL,
+            size_option varchar(255) NOT NULL,
+            size_detail varchar(255) NOT NULL,
+            area float NOT NULL,
+            price_per_sqm float NOT NULL,
+            total_cost float NOT NULL,
+            quote_data longtext NOT NULL,
+            PRIMARY KEY  (id)
+        ) $charset_collate;";
+        
+        dbDelta($sql);
+        
+        $table_exists = $wpdb->get_var("SHOW TABLES LIKE '$table_name'") === $table_name;
+        if ($table_exists) {
+            echo '<div class="notice notice-success is-dismissible"><p>The quotes table was successfully created.</p></div>';
+        } else {
+            echo '<div class="notice notice-error is-dismissible"><p>Failed to create the quotes table. Error: ' . $wpdb->last_error . '</p></div>';
+        }
+    }
+    
     // Handle CSV export if requested
     if (isset($_GET['action']) && $_GET['action'] === 'export') {
-        // Set headers for CSV download
-        header('Content-Type: text/csv; charset=utf-8');
-        header('Content-Disposition: attachment; filename=ardosia-quotes-export-' . date('Y-m-d') . '.csv');
-        
-        // Create output stream
-        $output = fopen('php://output', 'w');
-        
-        // Add CSV headers
-        fputcsv($output, array(
-            'ID', 
-            'Date', 
-            'Email', 
-            'Postcode', 
-            'Paving Type', 
-            'Size Option', 
-            'Size Detail',
-            'Area (m²)', 
-            'Price per m²', 
-            'Total Cost'
-        ));
-        
-        // Get all quotes
-        $quotes = $wpdb->get_results("SELECT * FROM $table_name ORDER BY time DESC", ARRAY_A);
+        try {
+            // Set headers for CSV download
+            header('Content-Type: text/csv; charset=utf-8');
+            header('Content-Disposition: attachment; filename=ardosia-quotes-export-' . date('Y-m-d') . '.csv');
+            
+            // Create output stream
+            $output = fopen('php://output', 'w');
+            
+            // Add CSV headers
+            fputcsv($output, array(
+                'ID', 
+                'Date', 
+                'Email', 
+                'Postcode', 
+                'Paving Type', 
+                'Size Option', 
+                'Size Detail',
+                'Area (m²)', 
+                'Price per m²', 
+                'Total Cost'
+            ));
+            
+            // Check if table exists
+            $table_exists = $wpdb->get_var("SHOW TABLES LIKE '$table_name'") === $table_name;
+            
+            if (!$table_exists) {
+                fputcsv($output, array('Error: Quotes table does not exist in the database.'));
+                fclose($output);
+                exit;
+            }
+            
+            // Get all quotes with error handling
+            $quotes = $wpdb->get_results("SELECT * FROM $table_name ORDER BY time DESC", ARRAY_A);
+            
+            if ($wpdb->last_error) {
+                fputcsv($output, array('Error: ' . $wpdb->last_error));
+                fclose($output);
+                exit;
+            }
+            
+            // Check if there are any quotes
+            if (empty($quotes)) {
+                fputcsv($output, array('No quotes found in the database.'));
+                fclose($output);
+                exit;
+            }
         
         // Add data rows
         foreach ($quotes as $quote) {
@@ -66,6 +119,11 @@ function pps_quotes_admin_page() {
         
         fclose($output);
         exit;
+        } catch (Exception $e) {
+            // Log error and show a simple error message
+            error_log('CSV export error: ' . $e->getMessage());
+            wp_die('Error exporting CSV: ' . $e->getMessage());
+        }
     }
     
     // Handle deletion if confirmed
@@ -100,7 +158,23 @@ function pps_quotes_admin_page() {
         
         <hr class="wp-header-end">
         
-        <?php if (empty($quotes)): ?>
+        <?php 
+        // Show database table info for debugging
+        if (current_user_can('manage_options')) {
+            $table_exists = $wpdb->get_var("SHOW TABLES LIKE '$table_name'") === $table_name;
+            echo '<div class="notice notice-info is-dismissible">';
+            echo '<p><strong>Database Info:</strong> ';
+            echo 'Table Name: ' . esc_html($table_name) . ', ';
+            echo 'Table Exists: ' . ($table_exists ? 'Yes' : 'No');
+            if (!$table_exists) {
+                echo ' <a href="#" onclick="if(confirm(\'Attempt to create the table now?\')) { window.location = \'' . 
+                     esc_url(admin_url('admin.php?page=pps-quotes&action=create_table')) . 
+                     '\'; } return false;" class="button button-small">Create Table</a>';
+            }
+            echo '</p></div>';
+        }
+        
+        if (empty($quotes)): ?>
             <div class="notice notice-info">
                 <p>No quote submissions found.</p>
             </div>

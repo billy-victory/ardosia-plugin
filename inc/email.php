@@ -1,5 +1,36 @@
 <?php
 
+/**
+ * Make sure the activation function is available to create tables if needed
+ */
+if (!function_exists('pps_modules_activate')) {
+    function pps_modules_activate() {
+        global $wpdb;
+        $charset_collate = $wpdb->get_charset_collate();
+        $table_name = $wpdb->prefix . 'pps_quotes';
+
+        $sql = "CREATE TABLE $table_name (
+            id mediumint(9) NOT NULL AUTO_INCREMENT,
+            time datetime DEFAULT CURRENT_TIMESTAMP NOT NULL,
+            email varchar(100) NOT NULL,
+            postcode varchar(20) DEFAULT '' NOT NULL,
+            paving_type varchar(255) NOT NULL,
+            size_option varchar(255) NOT NULL,
+            size_detail varchar(255) NOT NULL,
+            area float NOT NULL,
+            price_per_sqm float NOT NULL,
+            total_cost float NOT NULL,
+            quote_data longtext NOT NULL,
+            PRIMARY KEY  (id)
+        ) $charset_collate;";
+
+        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+        dbDelta($sql);
+        
+        error_log('pps_modules_activate: Created or updated quotes table');
+    }
+}
+
 function pps_send_quote_email() {
     error_log('pps_send_quote_email: Handler called');
     $email = isset($_POST['email']) ? sanitize_email($_POST['email']) : '';
@@ -26,6 +57,11 @@ function pps_send_quote_email() {
     global $wpdb;
     $table_name = $wpdb->prefix . 'pps_quotes';
     
+    error_log('pps_send_quote_email: Preparing to save to database table: ' . $table_name);
+    
+    // Fix for JSON handling - make sure quote data is properly formatted
+    $quote_data = is_string($quote_raw) ? $quote_raw : json_encode($quote);
+    
     $data = array(
         'email' => $email,
         'postcode' => $postcode,
@@ -35,8 +71,20 @@ function pps_send_quote_email() {
         'area' => isset($quote['area']) ? floatval($quote['area']) : 0,
         'price_per_sqm' => isset($quote['pricePerSqm']) ? floatval($quote['pricePerSqm']) : 0,
         'total_cost' => isset($quote['totalCost']) ? floatval($quote['totalCost']) : 0,
-        'quote_data' => $quote_raw
+        'quote_data' => $quote_data
     );
+    
+    // Format for debugging
+    error_log('pps_send_quote_email: Data to insert: ' . print_r($data, true));
+    
+    // Check if table exists
+    $table_exists = $wpdb->get_var("SHOW TABLES LIKE '$table_name'") === $table_name;
+    if (!$table_exists) {
+        error_log('pps_send_quote_email: Table does not exist. Attempting to create it.');
+        // Create table if it doesn't exist
+        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+        pps_modules_activate(); // Call function from ardosia-plugin.php
+    }
     
     $result = $wpdb->insert($table_name, $data);
     
@@ -100,11 +148,16 @@ function pps_send_quote_email() {
     $admin_sent = wp_mail($admin_email, $admin_subject, $admin_message, $headers);
     error_log('pps_send_quote_email: Admin notification email sent: ' . var_export($admin_sent, true));
     
-    if ($sent) {
-        error_log('pps_send_quote_email: Success');
-        wp_send_json_success(['message' => 'Quote email sent.']);
+    // Always consider database operation a success regardless of email status
+    if ($result !== false) {
+        error_log('pps_send_quote_email: Database operation successful, quote ID: ' . $wpdb->insert_id);
+        // Consider it success even if email failed
+        wp_send_json_success(['message' => 'Quote was processed successfully and saved to the database.']);
+    } else if ($sent) {
+        error_log('pps_send_quote_email: Success with email but database failed');
+        wp_send_json_success(['message' => 'Quote email sent but not saved to database.']);
     } else {
-        error_log('pps_send_quote_email: Failed to send email');
-        wp_send_json_error(['message' => 'Failed to send email.']);
+        error_log('pps_send_quote_email: Failed to send email and save to database');
+        wp_send_json_error(['message' => 'Failed to process quote.', 'db_error' => $wpdb->last_error]);
     }
 }
