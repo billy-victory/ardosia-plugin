@@ -88,6 +88,11 @@
 								{/if}
 							</span>
 						</div>
+						<div class="apc-quote-vat-delivery">
+							<span class="apc-quote-vat-delivery-label apc-disclaimer-text"
+								>Disclaimer: Prices before VAT and delivery</span
+							>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -169,3 +174,16 @@
 		</div>
 	{/if}
 </div>
+
+<style>
+	.apc-disclaimer-text {
+		color: #94a3b8; /* Custom gray color */
+		font-size: 0.9em; /* Slightly smaller text */
+		font-style: italic; /* Italicize for disclaimer style */
+		margin-top: 8px; /* Add some space above */
+		display: block; /* Ensure it takes its own line if needed */
+		text-align: left; /* Align to the left */
+	}
+
+	/* Add any other styles you need for this component below */
+</style>

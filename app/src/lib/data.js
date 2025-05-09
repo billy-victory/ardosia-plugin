@@ -60,6 +60,11 @@ export const pavingTypes = [
 export const sizeOptions = {
 	"brazilian-graphite": [
 		{
+			id: "single-size",
+			name: "Single Size Sizes",
+			description: "Uniform size for consistent patterns",
+		},
+		{
 			id: "three-sizes",
 			name: "Three Sizes Mix",
 			description: "Varied sizes for traditional layouts",
@@ -75,6 +80,11 @@ export const sizeOptions = {
 		},
 	],
 	"tumbled-slate": [
+		{
+			id: "single-size",
+			name: "Single Size Sizes",
+			description: "Uniform size for consistent patterns",
+		},
 		{
 			id: "three-sizes",
 			name: "Three Sizes Mix",
@@ -132,7 +142,7 @@ export const sizeOptions = {
 // Size specific options with prices
 export const sizeDetails = {
 	"brazilian-graphite": {
-		// "single-size": [{ size: "900x600 x 20 mm", price: 37.0 }],
+		"single-size": [{ size: "900 x 600 x 20 mm", price: 37.0 }],
 		"three-sizes": [
 			{ size: "900 x 600 x 20 mm", price: 37.0 },
 			{ size: "600 x 600 x 20 mm", price: 37.0 },
@@ -140,12 +150,11 @@ export const sizeDetails = {
 		],
 	},
 	"brazilian-blue-grey": {
-		// Mapped from 'brazilian-blue'
 		"single-size": [{ size: "900 x 600 x 20 mm", price: 37.0 }],
 	},
 	"tumbled-slate": {
 		"single-size": [
-			{ size: "100 x 100 x 20 mm", price: 45.0 },
+			{ size: "100 x 100 x 7-10 mm", price: 45.0 },
 			{ size: "300 x 150 x 20 mm", price: 35.0 },
 		],
 		"three-sizes": [
@@ -155,7 +164,6 @@ export const sizeDetails = {
 		],
 	},
 	"tumbled-limestone": {
-		// Mapped from 'tumbled-black-limestone-cobbles'
 		"single-size": [
 			{ size: "150 x 150 x 20 mm", price: 24.0 },
 			{ size: "300 x 75 x 20 mm", price: 24.0 },
