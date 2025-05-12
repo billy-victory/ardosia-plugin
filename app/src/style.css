@@ -45,7 +45,6 @@
 	background: var(--background-color);
 	border-radius: var(--border-radius);
 	box-shadow: var(--box-shadow);
-	border: 1px solid var(--border-color);
 	overflow: hidden;
 }
 .apc-main-card {

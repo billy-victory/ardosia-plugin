@@ -177,12 +177,28 @@
 	function handleNext() {
 		if (currentStep < 4) {
 			goToStep(currentStep + 1);
+			// Scroll to top of the calculator
+			const calculatorContainer = document.querySelector(".apc-app-container");
+			if (calculatorContainer) {
+				calculatorContainer.scrollIntoView({
+					behavior: "smooth",
+					block: "start",
+				});
+			}
 		}
 	}
 
 	function handleBack() {
 		if (currentStep > 1) {
 			goToStep(currentStep - 1);
+			// Scroll to top of the calculator
+			const calculatorContainer = document.querySelector(".apc-app-container");
+			if (calculatorContainer) {
+				calculatorContainer.scrollIntoView({
+					behavior: "smooth",
+					block: "start",
+				});
+			}
 		}
 	}
 
@@ -195,6 +211,17 @@
 		width = 0;
 		showEmailModal = false; // Close modal if open
 		recipientEmail = "";
+
+		// Scroll to top of the calculator
+		setTimeout(() => {
+			const calculatorContainer = document.querySelector(".apc-app-container");
+			if (calculatorContainer) {
+				calculatorContainer.scrollIntoView({
+					behavior: "smooth",
+					block: "start",
+				});
+			}
+		}, 10);
 	}
 
 	// Email Modal Logic (kept in App.svelte for simplicity)
